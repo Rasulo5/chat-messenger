@@ -45,4 +45,4 @@ ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 ENV NODE_ENV production
 
-CMD ["node", "server.js"]
+CMD ["node", "server.js", "--port", "3000", "--hostname", "0.0.0.0"]
