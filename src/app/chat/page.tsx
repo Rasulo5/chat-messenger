@@ -2,6 +2,9 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+
+// Отключаем статическую генерацию для этой страницы
+export const dynamic = "force-dynamic";
 import { v4 as uuidv4 } from "uuid";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 
