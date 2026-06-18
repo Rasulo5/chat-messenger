@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String                  @id @default(uuid())
+  name            String
+  avatarColor     String
+  createdAt       DateTime                @default(now())
+  messages        Message[]
+  conversations   ConversationParticipant[]
+}
+
+model Conversation {
+  id             String                  @id @default(uuid())
+  name           String?
+  isGroup        Boolean                 @default(false)
+  createdAt      DateTime                @default(now())
+  participants   ConversationParticipant[]
+  messages       Message[]
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  content        String
+  imageUrl       String?
+  createdAt      DateTime     @default(now())
+  userId         String
+  conversationId String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([userId])
+}
+
+model ConversationParticipant {
+  conversationId String
+  userId         String
+  joinedAt       DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+}
