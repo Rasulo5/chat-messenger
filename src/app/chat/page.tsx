@@ -1,12 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-
-// Полностью отключаем статическую генерацию и SSR для этой страницы
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const runtime = "nodejs";
 import { v4 as uuidv4 } from "uuid";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 
@@ -36,7 +31,8 @@ interface Conversation {
   created_at: string;
 }
 
-export default function ChatPage() {
+// Внутренний компонент который использует useSearchParams
+function ChatContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const userId = searchParams.get("userId");
@@ -621,5 +617,23 @@ export default function ChatPage() {
         </div>
       )}
     </div>
+  );
+}
+
+// Главный компонент с Suspense границей
+export default function ChatPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-4xl mb-4 animate-pulse">💬</div>
+            <p className="text-gray-600">Загрузка чата...</p>
+          </div>
+        </div>
+      }
+    >
+      <ChatContent />
+    </Suspense>
   );
 }
