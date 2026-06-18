@@ -6,7 +6,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 // Полностью отключаем статическую генерацию и SSR для этой страницы
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
-export const revalidate = 0;
 export const runtime = "nodejs";
 import { v4 as uuidv4 } from "uuid";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
